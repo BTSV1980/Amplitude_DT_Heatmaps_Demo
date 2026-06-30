@@ -369,19 +369,23 @@
 </script>
 
 <!-- ===================== AMPLITUDE INSTRUMENTATION ===================== -->
-<!-- Browser SDK 2 + Session Replay plugin, EU data residency -->
-<script src="https://cdn.amplitude.com/libs/analytics-browser-2.11.1-min.js.gz"></script>
-<script src="https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.10.0-min.js.gz"></script>
+<!-- Per-key script loader: Amplitude serves current SDK versions remotely,
+     so we always stay above the minimums required for Heatmap screenshot
+     capture (analytics-browser >= 2.35.1, session-replay >= 1.31.0,
+     plugin-session-replay >= 1.25.12). Session Replay loads automatically. -->
+<script src="https://cdn.amplitude.com/script/3495b924a5f3ca762061d61cbe21013d.js"></script>
 <script>
   (function () {
     var API_KEY = "3495b924a5f3ca762061d61cbe21013d"; // Telekom test project (100051718, EU DC)
 
+    // Session Replay at 100% capture (controlled test project, not prod traffic)
     window.sessionReplay && window.amplitude.add(
       window.sessionReplay.plugin({ sampleRate: 1 })
     );
 
     window.amplitude.init(API_KEY, {
       serverZone: "EU",
+      fetchRemoteConfig: true,
       autocapture: {
         elementInteractions: true, // required for Heatmaps
         pageViews: true,

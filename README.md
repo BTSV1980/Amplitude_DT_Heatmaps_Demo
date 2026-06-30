@@ -9,11 +9,17 @@ A static, single-page replica of the structure and content of [telekom.de/start]
 
 ## What's instrumented
 
-- **Amplitude Browser SDK 2** (`@amplitude/analytics-browser`, loaded via CDN)
+- **Amplitude per-key script loader** (`https://cdn.amplitude.com/script/<KEY>.js`) — Amplitude serves the current SDK versions remotely, so the site automatically stays above the minimums the **Heatmap screenshot-capture** feature requires:
+  - `@amplitude/analytics-browser` ≥ 2.35.1
+  - `@amplitude/session-replay-browser` ≥ 1.31.0
+  - `@amplitude/plugin-session-replay-browser` ≥ 1.25.12
 - **Autocapture with `elementInteractions: true`** — this is the flag that actually populates Heatmaps (clicks, rage clicks, dead clicks on real DOM elements)
-- **Session Replay plugin** (`sampleRate: 1` — 100% capture, since this is a controlled test, not production traffic)
+- **Session Replay** (`sampleRate: 1` — 100% capture, since this is a controlled test, not production traffic)
 - **Page views, sessions, form interactions, file downloads** autocapture also enabled
 - **EU data residency** (`serverZone: "EU"`) — pointed at Amplitude EU
+
+> **Why the script loader instead of pinned version numbers?**
+> The first build pinned `analytics-browser-2.11.1` + `plugin-session-replay-browser-1.10.0`. Those worked for basic heatmap click data but were **too old for the Heatmap "capture screenshot" feature**, which threw an "Update your SDK" dialog. The per-key loader removes manual version-chasing — Amplitude keeps it current centrally. The tradeoff: the API key sits in the script URL, and SDK versions can change under you. For a throwaway test project that's the right call; for a reproducible/locked build you'd pin explicit versions ≥ the minimums above instead.
 
 Project details used in this build:
 
@@ -56,3 +62,4 @@ Project details used in this build:
 - All links are dead (`href="#"` or tab-switch JS) by design — this avoids accidentally sending real Telekom customers into the live site mid-demo. Every clickable element fires either a `data-nav` autocapture interaction or, for product cards, an explicit `track()` call — both feed Heatmaps and standard analytics.
 - 100% Session Replay sample rate is intentional for a low-traffic test project. **Turn this down (e.g. 0.1–0.3) if this ever gets meaningful real-user traffic**, to stay within replay quota.
 - If Heatmap data doesn't appear after testing: confirm `elementInteractions` autocapture is actually enabled at the **project level** in Amplitude settings too (some orgs gate it behind a project toggle in addition to the SDK config).
+- If the Heatmap **"capture screenshot"** step still shows an "Update your SDK" dialog after deploying this version: hard-refresh / clear cache so the browser re-fetches the script loader (it may have cached the old pinned bundle). If it persists, the fallback is to pin explicit recent versions instead — `analytics-browser` ≥ 2.35.1 and `plugin-session-replay-browser` ≥ 1.25.12 via the `cdn.amplitude.com/libs/...` URLs.
