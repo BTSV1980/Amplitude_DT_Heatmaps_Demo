@@ -9,17 +9,16 @@ A static, single-page replica of the structure and content of [telekom.de/start]
 
 ## What's instrumented
 
-- **Amplitude per-key script loader** (`https://cdn.amplitude.com/script/<KEY>.js`) — Amplitude serves the current SDK versions remotely, so the site automatically stays above the minimums the **Heatmap screenshot-capture** feature requires:
-  - `@amplitude/analytics-browser` ≥ 2.35.1
-  - `@amplitude/session-replay-browser` ≥ 1.31.0
-  - `@amplitude/plugin-session-replay-browser` ≥ 1.25.12
+- **Amplitude Browser SDK 2 (pinned versions)** loaded via CDN:
+  - `@amplitude/analytics-browser` **2.35.1**
+  - `@amplitude/plugin-session-replay-browser` **1.25.12**
+  - These meet the minimums the **Heatmap screenshot-capture** feature requires (≥ 2.35.1 and ≥ 1.25.12 respectively).
 - **Autocapture with `elementInteractions: true`** — this is the flag that actually populates Heatmaps (clicks, rage clicks, dead clicks on real DOM elements)
 - **Session Replay** (`sampleRate: 1` — 100% capture, since this is a controlled test, not production traffic)
 - **Page views, sessions, form interactions, file downloads** autocapture also enabled
 - **EU data residency** (`serverZone: "EU"`) — pointed at Amplitude EU
 
-> **Why the script loader instead of pinned version numbers?**
-> The first build pinned `analytics-browser-2.11.1` + `plugin-session-replay-browser-1.10.0`. Those worked for basic heatmap click data but were **too old for the Heatmap "capture screenshot" feature**, which threw an "Update your SDK" dialog. The per-key loader removes manual version-chasing — Amplitude keeps it current centrally. The tradeoff: the API key sits in the script URL, and SDK versions can change under you. For a throwaway test project that's the right call; for a reproducible/locked build you'd pin explicit versions ≥ the minimums above instead.
+> **Note on pinning at the minimum:** these versions are pinned exactly at the screenshot-capture floor. They give you a reproducible, locked build (nothing changes under you), but if Amplitude raises the minimum again in a future release, you'd need to bump these manually. If you'd rather never version-chase, swap both `<script>` tags for the per-key loader `https://cdn.amplitude.com/script/<KEY>.js`, which Amplitude keeps current centrally.
 
 Project details used in this build:
 

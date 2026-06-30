@@ -369,11 +369,11 @@
 </script>
 
 <!-- ===================== AMPLITUDE INSTRUMENTATION ===================== -->
-<!-- Per-key script loader: Amplitude serves current SDK versions remotely,
-     so we always stay above the minimums required for Heatmap screenshot
-     capture (analytics-browser >= 2.35.1, session-replay >= 1.31.0,
-     plugin-session-replay >= 1.25.12). Session Replay loads automatically. -->
-<script src="https://cdn.amplitude.com/script/3495b924a5f3ca762061d61cbe21013d.js"></script>
+<!-- Pinned SDK versions (reproducible build). These meet the minimums the
+     Heatmap screenshot-capture feature requires:
+     analytics-browser >= 2.35.1, plugin-session-replay-browser >= 1.25.12. -->
+<script src="https://cdn.amplitude.com/libs/analytics-browser-2.35.1-min.js.gz"></script>
+<script src="https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.25.12-min.js.gz"></script>
 <script>
   (function () {
     var API_KEY = "3495b924a5f3ca762061d61cbe21013d"; // Telekom test project (100051718, EU DC)
@@ -385,7 +385,6 @@
 
     window.amplitude.init(API_KEY, {
       serverZone: "EU",
-      fetchRemoteConfig: true,
       autocapture: {
         elementInteractions: true, // required for Heatmaps
         pageViews: true,
