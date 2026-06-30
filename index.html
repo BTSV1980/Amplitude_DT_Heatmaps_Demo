@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telekom | Mobilfunk, Festnetz & Internet und TV (Amplitude Heatmap Demo)</title>
+<meta name="description" content="Bei der Telekom bekommen Sie Mobilfunk (5G/LTE), Festnetz & Internet sowie TV aus einer Hand – für zu Hause und unterwegs.">
+<style>
+  :root {
+    --magenta: #E20074;
+    --magenta-dark: #B0005A;
+    --dark: #262626;
+    --grey-bg: #F5F5F5;
+    --white: #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "TeleNeo", "Helvetica Neue", Arial, sans-serif; color: var(--dark); background: var(--white); }
+  a { text-decoration: none; color: inherit; }
+  img { max-width: 100%; display: block; }
+
+  /* ===== Top utility bar ===== */
+  .top-bar { background: var(--dark); color: #fff; font-size: 12px; }
+  .top-bar .wrap { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; padding: 6px 24px; }
+  .top-bar a { padding: 0 10px; opacity: .85; }
+  .top-bar a:hover { opacity: 1; }
+
+  /* ===== Main nav ===== */
+  header.main-nav { border-bottom: 1px solid #eee; position: sticky; top: 0; background: #fff; z-index: 50; }
+  .nav-wrap { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; }
+  .logo img { height: 36px; }
+  nav.primary { display: flex; gap: 28px; }
+  nav.primary a { font-weight: 600; font-size: 15px; padding: 8px 0; border-bottom: 3px solid transparent; }
+  nav.primary a:hover { border-bottom: 3px solid var(--magenta); }
+  .nav-icons { display: flex; gap: 18px; align-items: center; }
+  .nav-icons span { font-size: 20px; cursor: pointer; }
+
+  /* ===== Hero ===== */
+  .hero { background: linear-gradient(120deg, var(--magenta) 0%, #ff5fa2 100%); color: #fff; }
+  .hero-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 40px; padding: 60px 24px; flex-wrap: wrap; }
+  .hero-text { flex: 1 1 380px; }
+  .hero-text .eyebrow { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; opacity: .85; }
+  .hero-text h1 { font-size: 38px; line-height: 1.15; margin: 10px 0 16px; }
+  .hero-text p { font-size: 16px; opacity: .92; margin-bottom: 24px; max-width: 480px; }
+  .hero-text .price { font-size: 22px; font-weight: 700; margin-bottom: 18px; }
+  .btn { display: inline-block; background: #fff; color: var(--magenta); font-weight: 700; padding: 14px 28px; border-radius: 28px; font-size: 15px; cursor: pointer; transition: transform .15s ease; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-outline { border: 2px solid #fff; background: transparent; color: #fff; }
+  .hero-image { flex: 1 1 320px; text-align: center; }
+  .hero-image .placeholder { background: rgba(255,255,255,.15); border-radius: 16px; height: 260px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+
+  /* ===== Category tabs ===== */
+  .tabs { max-width: 1280px; margin: 0 auto; display: flex; gap: 8px; padding: 24px 24px 0; border-bottom: 1px solid #eee; }
+  .tab-btn { padding: 12px 22px; font-weight: 600; border-radius: 8px 8px 0 0; cursor: pointer; color: #555; }
+  .tab-btn.active { color: var(--magenta); border-bottom: 3px solid var(--magenta); }
+
+  /* ===== Section ===== */
+  section.category { max-width: 1280px; margin: 0 auto; padding: 40px 24px; }
+  section.category h2 { font-size: 26px; margin-bottom: 24px; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .card { background: var(--grey-bg); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: box-shadow .15s ease; }
+  .card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+  .card .tag { font-size: 11px; background: var(--magenta); color: #fff; padding: 3px 10px; border-radius: 12px; align-self: flex-start; font-weight: 700; }
+  .card .img-ph { background: #e4e4e4; border-radius: 10px; height: 140px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 13px; overflow:hidden;}
+  .card .img-ph img { width:100%; height:100%; object-fit: cover; }
+  .card h3 { margin: 4px 0 0; font-size: 17px; }
+  .card p { margin: 0; font-size: 14px; color: #555; flex-grow: 1; }
+  .card .cta { font-weight: 700; color: var(--magenta); font-size: 14px; }
+
+  .link-row { display: flex; gap: 18px; margin-top: 18px; flex-wrap: wrap; }
+  .link-row a { font-weight: 600; font-size: 14px; padding: 8px 16px; border: 1px solid #ddd; border-radius: 20px; }
+  .link-row a:hover { border-color: var(--magenta); color: var(--magenta); }
+
+  /* ===== Direkteinstiege ===== */
+  .quicklinks { background: var(--grey-bg); padding: 50px 24px; }
+  .quicklinks-wrap { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
+  .quicklinks h4 { font-size: 15px; text-transform: uppercase; letter-spacing: .05em; color: var(--magenta); margin-bottom: 14px; }
+  .quicklinks ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  .quicklinks a { font-size: 14px; }
+  .quicklinks a:hover { color: var(--magenta); }
+
+  /* ===== Newsletter / App banner ===== */
+  .app-banner { background: var(--dark); color: #fff; padding: 50px 24px; }
+  .app-banner-wrap { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+  .app-banner h3 { font-size: 22px; margin: 0 0 8px; }
+  .app-banner p { margin: 0; opacity: .8; font-size: 14px; }
+  .store-badges { display: flex; gap: 12px; }
+  .store-badges .badge { background: #fff; color: var(--dark); padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; }
+
+  /* ===== Footer ===== */
+  footer { background: #1a1a1a; color: #ccc; padding: 50px 24px 24px; font-size: 13px; }
+  .footer-wrap { max-width: 1280px; margin: 0 auto; }
+  .footer-cols { display: flex; gap: 40px; flex-wrap: wrap; margin-bottom: 30px; }
+  .footer-cols a { display:block; margin-bottom: 8px; opacity: .8; }
+  .footer-cols a:hover { opacity: 1; color: #fff; }
+  .footer-legal { display: flex; gap: 16px; flex-wrap: wrap; border-top: 1px solid #333; padding-top: 18px; }
+  .footer-legal a { opacity: .7; }
+
+  @media (max-width: 720px) {
+    nav.primary { display: none; }
+    .hero-text h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== TOP UTILITY BAR ===================== -->
+<div class="top-bar">
+  <div class="wrap">
+    <div>
+      <a href="#" data-nav="privatkunden">Privatkunden</a>
+      <a href="#" data-nav="geschaeftskunden">Geschäftskunden</a>
+    </div>
+    <div>
+      <a href="#" data-nav="shops">Telekom Shops</a>
+      <a href="#" data-nav="kontakt">Kontakt</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MAIN NAV ===================== -->
+<header class="main-nav">
+  <div class="nav-wrap">
+    <a href="#top" class="logo" data-nav="logo">
+      <img src="https://www.telekom.de/resources/images/974660/telekom-logo.svg" alt="Telekom Logo">
+    </a>
+    <nav class="primary">
+      <a href="#internet" data-nav="internet">Internet</a>
+      <a href="#tv" data-nav="tv">TV</a>
+      <a href="#mobilfunk" data-nav="mobilfunk">Mobilfunk</a>
+      <a href="#app" data-nav="meinmagenta-app">MeinMagenta App</a>
+      <a href="#service" data-nav="service">Service</a>
+    </nav>
+    <div class="nav-icons">
+      <span data-nav="suche" title="Suche">🔍</span>
+      <span data-nav="warenkorb" title="Warenkorb">🛒</span>
+      <span data-nav="login" title="Login">👤</span>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="eyebrow">MagentaTV Flex · FIFA WM 2026</div>
+      <h1>FIFA WM 2026 live streamen</h1>
+      <p>Jetzt MagentaTV mit flexibler Laufzeit bestellen und alle 104 Spiele der FIFA WM 26 live in UHD erleben, davon 44 exklusiv.</p>
+      <div class="price">Nur 11&nbsp;€ mtl.</div>
+      <a href="#" class="btn" data-cta="hero-zum-angebot">Zum Angebot</a>
+      <a href="#app" class="btn btn-outline" style="margin-left:12px;" data-cta="hero-meinmagenta-app">Zur MeinMagenta App</a>
+    </div>
+    <div class="hero-image">
+      <div class="placeholder">WM 2026 Kampagnenmotiv</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CATEGORY TABS ===================== -->
+<div class="tabs">
+  <div class="tab-btn active" data-nav="tab-internet" onclick="showCategory('internet')">Internet & Glasfaser</div>
+  <div class="tab-btn" data-nav="tab-mobilfunk" onclick="showCategory('mobilfunk')">Mobilfunk</div>
+  <div class="tab-btn" data-nav="tab-kunden" onclick="showCategory('kunden')">Für unsere Kunden</div>
+</div>
+
+<!-- ===================== INTERNET & GLASFASER ===================== -->
+<section class="category" id="internet" data-category="internet">
+  <h2>Internet & Glasfaser</h2>
+  <div class="card-grid">
+    <div class="card" data-product="dsl-special" onclick="track('Product Card Clicked','DSL Special')">
+      <span class="tag">Nur online bis 30.06.</span>
+      <div class="img-ph"><img src="https://www.telekom.de/resources/images/1321038/magentamobil-wm-teaser-wide-background-s.webp" alt=""></div>
+      <h3>Schnelles Internet zum Megapreis</h3>
+      <p>100 MBit/s für ∅ 29,91&nbsp;€ mtl. — Online-Special für kurze Zeit.</p>
+      <span class="cta">Jetzt sichern →</span>
+    </div>
+    <div class="card" data-product="glasfaser-150" onclick="track('Product Card Clicked','Glasfaser 150')">
+      <span class="tag">Nur online bis 30.06.</span>
+      <div class="img-ph">Produktbild Glasfaser 150</div>
+      <h3>Glasfaser 150</h3>
+      <p>Zu Hause surfen mit bis zu 150 MBit/s für ∅ 38,32&nbsp;€ mtl.</p>
+      <span class="cta">Zum Angebot →</span>
+    </div>
+    <div class="card" data-product="internet-young" onclick="track('Product Card Clicked','Internet Young')">
+      <span class="tag">Für alle unter 28</span>
+      <div class="img-ph">Produktbild Young-Tarif</div>
+      <h3>Streamen, zocken, scrollen</h3>
+      <p>100 MBit/s für ∅ 29,49&nbsp;€ mtl. — nur online bis 30.06.</p>
+      <span class="cta">Zum Angebot →</span>
+    </div>
+  </div>
+  <div class="link-row">
+    <a href="#" data-nav="link-internet">Internet</a>
+    <a href="#" data-nav="link-glasfaser">Glasfaser</a>
+    <a href="#" data-nav="link-young">Young</a>
+  </div>
+</section>
+
+<!-- ===================== MOBILFUNK ===================== -->
+<section class="category" id="mobilfunk" data-category="mobilfunk" style="display:none;">
+  <h2>Mobilfunk</h2>
+  <div class="card-grid">
+    <div class="card" data-product="magentamobil-m" onclick="track('Product Card Clicked','MagentaMobil M')">
+      <span class="tag">Für kurze Zeit</span>
+      <div class="img-ph"><img src="https://www.telekom.de/resources/images/1320178/magentamobil-wm-teaser-wide-background-s.webp" alt=""></div>
+      <h3>Unbegrenzt surfen für nur 39,95&nbsp;€ mtl.</h3>
+      <p>statt 49,95&nbsp;€ mtl. im Tarif MagentaMobil M.</p>
+      <span class="cta">Zum Tarif →</span>
+    </div>
+    <div class="card" data-product="magentamobil-xl-young" onclick="track('Product Card Clicked','MagentaMobil XL Young')">
+      <span class="tag">40 € mtl. sparen</span>
+      <div class="img-ph">Young WM-Aktion</div>
+      <h3>Unlimited Datenvolumen für alle unter 28</h3>
+      <p>Nur 34,95&nbsp;€ mtl. statt 74,95&nbsp;€ mtl. im Tarif MagentaMobil XL Young.</p>
+      <span class="cta">Zum Young-Tarif →</span>
+    </div>
+    <div class="card" data-product="pixel-10-pro-xl" onclick="track('Product Card Clicked','Google Pixel 10 Pro XL')">
+      <div class="img-ph">Google Pixel 10 Pro XL</div>
+      <h3>Google Pixel 10 Pro XL</h3>
+      <p>Jetzt ab 1&nbsp;€ sichern und Google Pixelsnap Ring Stand &amp; Google TV Streamer gratis erhalten.</p>
+      <span class="cta">Zum Pixel 10 Pro XL →</span>
+    </div>
+    <div class="card" data-product="kids-watch" onclick="track('Product Card Clicked','Kids Watch')">
+      <span class="tag">Nur online</span>
+      <div class="img-ph">Xplora Kids Watch</div>
+      <h3>Kids Watch zum Schulstart</h3>
+      <p>Die sichere Kinder-Smartwatch mit GPS für 1&nbsp;€ + 5 Monate kein Tarifpreis.</p>
+      <span class="cta">Zur Xplora Kids Watch →</span>
+    </div>
+  </div>
+  <div class="link-row">
+    <a href="#" data-nav="link-tarife">Tarife</a>
+    <a href="#" data-nav="link-geraete">Geräte</a>
+    <a href="#" data-nav="link-young-mobil">Young</a>
+  </div>
+</section>
+
+<!-- ===================== FÜR UNSERE KUNDEN ===================== -->
+<section class="category" id="kunden" data-category="kunden" style="display:none;">
+  <h2>Für unsere Kunden</h2>
+  <div class="card-grid">
+    <div class="card" data-product="iphone-17-vvl" onclick="track('Product Card Clicked','iPhone 17 Vertragsverlängerung')">
+      <div class="img-ph"><img src="https://www.telekom.de/resources/images/1320216/iphone17-vvl-teaser-wide-background-s.webp" alt=""></div>
+      <h3>Der perfekte Zeitpunkt für ein Upgrade</h3>
+      <p>Jetzt mit iPhone 17 Vertrag verlängern und zusätzlich 120&nbsp;€ sparen.</p>
+      <span class="cta">Vertrag verlängern →</span>
+    </div>
+    <div class="card" data-product="galaxy-s26" onclick="track('Product Card Clicked','Galaxy S26')">
+      <span class="tag">Exklusiv online</span>
+      <div class="img-ph">Samsung Galaxy S26 Serie</div>
+      <h3>Bis zu 390&nbsp;€ sparen</h3>
+      <p>Mobilfunk-Vertrag mit neuem Samsung Galaxy aus der S26-Serie verlängern — für alle unter 28.</p>
+      <span class="cta">Zur Vertragsverlängerung →</span>
+    </div>
+    <div class="card" data-product="highspeed-zuhause" onclick="track('Product Card Clicked','HighSpeed ZuHause')">
+      <div class="img-ph">HighSpeed ZuHause</div>
+      <h3>Mehr Speed für Ihr Zuhause</h3>
+      <p>Schneller mit Highspeed bis zu 1.000&nbsp;MBit/s.</p>
+      <span class="cta">Einloggen und prüfen →</span>
+    </div>
+    <div class="card" data-product="magenta-moments" onclick="track('Product Card Clicked','Magenta Moments')">
+      <div class="img-ph">WM Gewinnspiel</div>
+      <h3>Magenta Moments — Lose sammeln und gewinnen</h3>
+      <p>Mit der MeinMagenta App an jedem WM-Spieltag neue Gewinnchancen sichern!</p>
+      <span class="cta">Zu Magenta Moments →</span>
+    </div>
+  </div>
+
+  <h3 style="margin-top:40px;">Ich möchte…</h3>
+  <div class="link-row">
+    <a href="#" data-nav="ichmoechte-internettarif">Internettarif wechseln</a>
+    <a href="#" data-nav="ichmoechte-tv">TV buchen und anpassen</a>
+    <a href="#" data-nav="ichmoechte-empfehlen">Empfehlen und verdienen</a>
+    <a href="#" data-nav="ichmoechte-pluskarte">PlusKarte buchen</a>
+    <a href="#" data-nav="ichmoechte-handytarif">Handytarif verlängern</a>
+    <a href="#" data-nav="ichmoechte-rechnung">Rechnung einsehen</a>
+  </div>
+</section>
+
+<!-- ===================== DIREKTEINSTIEGE ===================== -->
+<section class="quicklinks">
+  <div class="quicklinks-wrap">
+    <div>
+      <h4>Geräte</h4>
+      <ul>
+        <li><a href="#" data-nav="de-iphone-17">iPhone 17</a></li>
+        <li><a href="#" data-nav="de-galaxy-s26-ultra">Samsung Galaxy S26 Ultra</a></li>
+        <li><a href="#" data-nav="de-magentatv-one">MagentaTV One (2. Generation)</a></li>
+        <li><a href="#" data-nav="de-handyvergleich">Handyvergleich</a></li>
+        <li><a href="#" data-nav="de-smartwatches">Smartwatches</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Tarife</h4>
+      <ul>
+        <li><a href="#" data-nav="de-glasfasertarife">Glasfasertarife</a></li>
+        <li><a href="#" data-nav="de-magentatv">MagentaTV</a></li>
+        <li><a href="#" data-nav="de-handyvertrag">Handyvertrag</a></li>
+        <li><a href="#" data-nav="de-roaming">Ausland &amp; Roaming</a></li>
+        <li><a href="#" data-nav="de-allnetflat">Allnet Flat</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Themen</h4>
+      <ul>
+        <li><a href="#" data-nav="de-ftth">FTTH</a></li>
+        <li><a href="#" data-nav="de-meinmagenta-app">MeinMagenta App</a></li>
+        <li><a href="#" data-nav="de-nachhaltigkeit">Nachhaltigkeit</a></li>
+        <li><a href="#" data-nav="de-vertrag-rechnung">Vertrag &amp; Rechnung</a></li>
+        <li><a href="#" data-nav="de-esim">eSIM</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== APP BANNER ===================== -->
+<section class="app-banner" id="app">
+  <div class="app-banner-wrap">
+    <div>
+      <h3>Ihre Telekom Welt in einer App</h3>
+      <p>Von Highlights bis Services — alles, was zählt, in der MeinMagenta App.</p>
+    </div>
+    <div class="store-badges">
+      <div class="badge" data-nav="appstore" onclick="track('App Store Clicked','Apple App Store')">App Store</div>
+      <div class="badge" data-nav="googleplay" onclick="track('App Store Clicked','Google Play')">Google Play</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer id="service">
+  <div class="footer-wrap">
+    <div class="footer-cols">
+      <div>
+        <h4 style="color:#fff;">Social Media</h4>
+        <a href="#" data-nav="footer-facebook">Facebook</a>
+        <a href="#" data-nav="footer-linkedin">LinkedIn</a>
+        <a href="#" data-nav="footer-youtube">YouTube</a>
+        <a href="#" data-nav="footer-instagram">Instagram</a>
+        <a href="#" data-nav="footer-telekomhilft">Telekom hilft</a>
+      </div>
+      <div>
+        <h4 style="color:#fff;">Newsletter</h4>
+        <a href="#" data-nav="footer-newsletter">Telekom Aktionsangebote per E-Mail erhalten</a>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <a href="#" data-nav="footer-impressum">Impressum</a>
+      <a href="#" data-nav="footer-datenschutz">Datenschutz</a>
+      <a href="#" data-nav="footer-barrierefreiheit">Barrierefreiheit</a>
+      <a href="#" data-nav="footer-agb">AGB</a>
+      <a href="#" data-nav="footer-kuendigen">Verträge hier kündigen</a>
+    </div>
+    <p style="margin-top:18px; opacity:.5;">© Telekom Deutschland GmbH — Demo-Replikat ausschließlich für interne Amplitude Heatmap-Tests.</p>
+  </div>
+</footer>
+
+<script>
+  function showCategory(name) {
+    document.querySelectorAll('.category').forEach(s => s.style.display = (s.dataset.category === name) ? 'block' : 'none');
+    document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    track('Category Tab Viewed', name);
+  }
+  function track(eventName, label) {
+    if (window.amplitude) {
+      window.amplitude.track(eventName, { label: label });
+    }
+  }
+</script>
+
+<!-- ===================== AMPLITUDE INSTRUMENTATION ===================== -->
+<!-- Browser SDK 2 + Session Replay plugin, EU data residency -->
+<script src="https://cdn.amplitude.com/libs/analytics-browser-2.11.1-min.js.gz"></script>
+<script src="https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.10.0-min.js.gz"></script>
+<script>
+  (function () {
+    var API_KEY = "3495b924a5f3ca762061d61cbe21013d"; // Telekom test project (100051718, EU DC)
+
+    window.sessionReplay && window.amplitude.add(
+      window.sessionReplay.plugin({ sampleRate: 1 })
+    );
+
+    window.amplitude.init(API_KEY, {
+      serverZone: "EU",
+      autocapture: {
+        elementInteractions: true, // required for Heatmaps
+        pageViews: true,
+        sessions: true,
+        formInteractions: true,
+        fileDownloads: true
+      },
+      defaultTracking: true
+    });
+  })();
+</script>
+
+</body>
+</html>
